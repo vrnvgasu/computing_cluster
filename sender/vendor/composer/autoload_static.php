@@ -16,10 +16,6 @@ class ComposerStaticInit9c275178cfdfab779cdbe0d8dfbbcbee
         array (
             'phpseclib3\\' => 11,
         ),
-        'a' => 
-        array (
-            'app\\' => 4,
-        ),
         'S' => 
         array (
             'Symfony\\Component\\Dotenv\\' => 25,
@@ -29,16 +25,16 @@ class ComposerStaticInit9c275178cfdfab779cdbe0d8dfbbcbee
             'PhpAmqpLib\\' => 11,
             'ParagonIE\\ConstantTime\\' => 23,
         ),
+        'A' => 
+        array (
+            'App\\' => 4,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
         'phpseclib3\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
-        ),
-        'app\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/App',
         ),
         'Symfony\\Component\\Dotenv\\' => 
         array (
@@ -51,6 +47,10 @@ class ComposerStaticInit9c275178cfdfab779cdbe0d8dfbbcbee
         'ParagonIE\\ConstantTime\\' => 
         array (
             0 => __DIR__ . '/..' . '/paragonie/constant_time_encoding/src',
+        ),
+        'App\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app',
         ),
     );
 

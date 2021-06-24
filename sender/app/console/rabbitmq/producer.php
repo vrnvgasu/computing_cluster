@@ -1,21 +1,12 @@
 <?php
-require_once __DIR__ . '/../../../vendor/autoload.php';
+require_once __DIR__ . '/../../../bin/app.php';
 
-use PhpAmqpLib\Connection\AMQPStreamConnection;
+use App\Factory;
+use App\RabbitConnection;
 use PhpAmqpLib\Message\AMQPMessage;
-use Symfony\Component\Dotenv\Dotenv;
+var_dump(2);
 
-if (file_exists(__DIR__ . '/../../../../.env')) {
-    (new Dotenv())->load(__DIR__ . '/../../../../.env');
-}
-
-$connection = new AMQPStreamConnection(
-    $_ENV['API_AMQP_HOST'],
-    $_ENV['API_AMQP_PORT'],
-    $_ENV['API_AMQP_USERNAME'],
-    $_ENV['API_AMQP_PASSWORD'],
-    $_ENV['API_AMQP_VHOST']
-);
+$connection = (new RabbitConnection())->getConnection();
 $channel = $connection->channel();
 
 $channel->exchange_declare(
@@ -26,10 +17,27 @@ $channel->exchange_declare(
     false
 );
 
-$data = implode(' ', array_slice($argv, 1));
-if (empty($data)) {
-    $data = "Hello World!";
+$taskCount = implode(' ', array_slice($argv, 1));
+if (empty($taskCount)) {
+    $taskCount = 5;
 }
+
+$data = [];
+
+/** @var \App\Task $task */
+foreach ((new Factory())->generateTasks((int)$taskCount) as $task) {
+    $data[] = [
+        'id' => $task->getId(),
+        'dimension' => $task->dimension->n,
+        'hurwitz' => [
+            'var1' => $task->hurwitz->var1,
+            'var2' => $task->hurwitz->var2,
+        ],
+        'bayes' => $task->bayes->probabilities,
+    ];
+}
+
+$data = json_encode($data);
 $msg = new AMQPMessage($data);
 
 $channel->basic_publish($msg, 'exchange', 'routing_key');
