@@ -24,6 +24,10 @@ class Calculation
      * @var Bayes
      */
     private $bayesHandler;
+    /**
+     * @var Laplace
+     */
+    private $laplaceHandler;
 
     public function __construct()
     {
@@ -32,6 +36,7 @@ class Calculation
         $this->savageHandler = new Savage();
         $this->hurwitzHandler = new Hurwitz();
         $this->bayesHandler = new Bayes();
+        $this->laplaceHandler = new Laplace();
     }
 
     public function handle(array $data): array
@@ -48,6 +53,7 @@ class Calculation
             'savage' => $this->savageHandler->handle($matrix),
             'hurwitz' => $this->hurwitzHandler->handle($matrix, $hurwitz),
             'bayes' => $this->bayesHandler->handle($matrix, $bayes),
+            'laplace' => $this->laplaceHandler->handle($matrix),
         ];
     }
 }
