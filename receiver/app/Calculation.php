@@ -12,11 +12,16 @@ class Calculation
      * @var Wald
      */
     private $waldHandler;
+    /**
+     * @var Savage
+     */
+    private $savageHandler;
 
     public function __construct()
     {
         $this->maxMixHandler = new MaxMax();
         $this->waldHandler = new Wald();
+        $this->savageHandler = new Savage();
     }
 
     public function handle(array $data): array
@@ -30,6 +35,7 @@ class Calculation
             'id' => $id,
             'maxMax' => $this->maxMixHandler->handle($matrix),
             'wald' => $this->waldHandler->handle($matrix),
+            'savage' => $this->savageHandler->handle($matrix),
         ];
     }
 }
