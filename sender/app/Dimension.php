@@ -5,12 +5,12 @@ namespace App;
 class Dimension
 {
     /**
-     * @var int
+     * @var array
      */
-    public $n;
+    public $vars;
 
-    public function __construct(int $n)
+    public function __construct(array $vars)
     {
-        $this->n = $n;
+        $this->vars = $vars;
     }
 }

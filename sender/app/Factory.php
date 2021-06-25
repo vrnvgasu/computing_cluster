@@ -4,6 +4,7 @@ namespace App;
 
 class Factory
 {
+    const DIMENSION = 10;
     /**
      * @param int $taskCount
      * @return array<Task>
@@ -22,15 +23,23 @@ class Factory
 
     public function generateTask(): Task
     {
-        $dimension = new Dimension(1000);
+        $dimensionVars = [];
+
+        for ($i = 0; $i < static::DIMENSION; $i++) {
+            for ($j = 0; $j < static::DIMENSION; $j++) {
+                $dimensionVars[$i][$j] = $i + rand(1, 10) - $j - rand(1, 10);
+            }
+        }
+
+        $dimension = new Dimension($dimensionVars);
         $hurwitz = new Hurwitz(rand(1, 10) / 100, rand(1, 10) / 100);
 
         $probabilities = [];
         $sum = 0;
-        $several = (int)round(100000 / $dimension->n);
+        $several = (int)round(100000 / static::DIMENSION);
 
 
-        for ($i = 0; $i < $dimension->n; $i++) {
+        for ($i = 0; $i < static::DIMENSION; $i++) {
             $probability = $several + (rand(0, 1) ? -1 : 1);
             $probabilities[] = $probability / 100000;
             $sum += $probability;

@@ -6,19 +6,19 @@ use App\RabbitConnection;
 $connection = (new RabbitConnection())->getConnection();
 $channel = $connection->channel();
 
-$channel->exchange_declare('exchange', 'direct', false, false, false);
-$channel->queue_declare('queue', false, false, false, false);
-$channel->queue_bind('queue', 'exchange', 'routing_key');
+$channel->exchange_declare($_ENV['EXCHANGE_RESULT'], 'direct', false, false, false);
+$channel->queue_declare($_ENV['QUEUE_RESULT'], false, false, false, false);
+$channel->queue_bind($_ENV['QUEUE_RESULT'], $_ENV['EXCHANGE_RESULT'], $_ENV['ROUTING_KEY_RESULT']);
 
 echo " [*] Waiting for messages. To exit press CTRL+C\n";
 
 $callback = function ($msg) {
-    echo ' [x] ', $msg->delivery_info['routing_key'], ':', $msg->body, "\n";
+    echo ' [x] ', $msg->body, "\n";
 };
 
 //подписались на нашу очередь $queue_name
 $channel->basic_consume(
-    'queue',
+    $_ENV['QUEUE_RESULT'],
     '',
     false,
     true,

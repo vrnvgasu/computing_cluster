@@ -8,15 +8,15 @@ use PhpAmqpLib\Message\AMQPMessage;
 $connection = (new RabbitConnection())->getConnection();
 $channel = $connection->channel();
 
-$channel->exchange_declare('exchange', 'direct', false, false, false);
-$channel->queue_declare('worker', false, false, false, false);
-$channel->queue_bind('worker', 'exchange', 'routing_key');
+$channel->exchange_declare($_ENV['EXCHANGE_INIT'], 'direct', false, false, false);
+$channel->queue_declare($_ENV['QUEUE_INIT'], false, false, false, false);
+$channel->queue_bind($_ENV['QUEUE_INIT'], $_ENV['EXCHANGE_INIT'], $_ENV['ROUTING_KEY_INIT']);
 
 echo " [*] Waiting for messages. To exit press CTRL+C\n";
 
 $consumer = new Consumer();
 $channel->basic_consume(
-    'worker',
+    $_ENV['QUEUE_INIT'],
     '',
     false,
     true,

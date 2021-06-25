@@ -10,7 +10,7 @@ $connection = (new RabbitConnection())->getConnection();
 $channel = $connection->channel();
 
 $channel->exchange_declare(
-    'exchange',
+    $_ENV['EXCHANGE_INIT'],
     'direct',
     false,
     false,
@@ -26,23 +26,23 @@ $data = [];
 
 /** @var \App\Task $task */
 foreach ((new Factory())->generateTasks((int)$taskCount) as $task) {
-    $data[] = [
+    $data = [
         'id' => $task->getId(),
-        'dimension' => $task->dimension->n,
+        'matrix' => $task->dimension->vars,
         'hurwitz' => [
             'var1' => $task->hurwitz->var1,
             'var2' => $task->hurwitz->var2,
         ],
         'bayes' => $task->bayes->probabilities,
     ];
+
+    $data = json_encode($data);
+    $msg = new AMQPMessage($data);
+
+    $channel->basic_publish($msg, $_ENV['EXCHANGE_INIT'], $_ENV['ROUTING_KEY_INIT']);
+
+    echo ' [x] Sent ', $data, "\n";
 }
-
-$data = json_encode($data);
-$msg = new AMQPMessage($data);
-
-$channel->basic_publish($msg, 'exchange', 'routing_key');
-
-echo ' [x] Sent ', $data, "\n";
 
 $channel->close();
 $connection->close();
