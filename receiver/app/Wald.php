@@ -2,20 +2,20 @@
 
 namespace App;
 
-class MaxMax
+class Wald
 {
     public function handle(array $matrix): array
     {
-        $maxItems = [];
+        $minItems = [];
 
         foreach ($matrix as $row) {
-            $maxItems[] = max($row);
+            $minItems[] = min($row);
         }
 
         $maxItemPosition = 0;
-        $maxItem = $maxItems[0];
+        $maxItem = $minItems[0];
 
-        foreach ($maxItems as $i => $item) {
+        foreach ($minItems as $i => $item) {
             if ($maxItem < $item) {
                 $maxItem = $item;
                 $maxItemPosition = $i;
@@ -23,7 +23,7 @@ class MaxMax
         }
 
         return [
-            'max' => $maxItems,
+            'min' => $minItems,
             'i' => $maxItemPosition,
             'value' => $maxItem,
         ];

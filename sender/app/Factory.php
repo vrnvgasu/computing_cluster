@@ -4,7 +4,6 @@ namespace App;
 
 class Factory
 {
-    const DIMENSION = 10;
     /**
      * @param int $taskCount
      * @return array<Task>
@@ -24,9 +23,10 @@ class Factory
     public function generateTask(): Task
     {
         $dimensionVars = [];
+        $n = $_ENV['FACTORY_DIMENSION'];
 
-        for ($i = 0; $i < static::DIMENSION; $i++) {
-            for ($j = 0; $j < static::DIMENSION; $j++) {
+        for ($i = 0; $i < $n; $i++) {
+            for ($j = 0; $j < $n; $j++) {
                 $dimensionVars[$i][$j] = $i + rand(1, 10) - $j - rand(1, 10);
             }
         }
@@ -36,10 +36,10 @@ class Factory
 
         $probabilities = [];
         $sum = 0;
-        $several = (int)round(100000 / static::DIMENSION);
+        $several = (int)round(100000 / $n);
 
 
-        for ($i = 0; $i < static::DIMENSION; $i++) {
+        for ($i = 0; $i < $n; $i++) {
             $probability = $several + (rand(0, 1) ? -1 : 1);
             $probabilities[] = $probability / 100000;
             $sum += $probability;

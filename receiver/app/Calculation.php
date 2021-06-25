@@ -8,10 +8,15 @@ class Calculation
      * @var MaxMax
      */
     private $maxMixHandler;
+    /**
+     * @var Wald
+     */
+    private $waldHandler;
 
     public function __construct()
     {
         $this->maxMixHandler = new MaxMax();
+        $this->waldHandler = new Wald();
     }
 
     public function handle(array $data): array
@@ -24,6 +29,7 @@ class Calculation
         return [
             'id' => $id,
             'maxMax' => $this->maxMixHandler->handle($matrix),
+            'wald' => $this->waldHandler->handle($matrix),
         ];
     }
 }
