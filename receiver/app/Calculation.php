@@ -16,12 +16,17 @@ class Calculation
      * @var Savage
      */
     private $savageHandler;
+    /**
+     * @var Hurwitz
+     */
+    private $hurwitzHandler;
 
     public function __construct()
     {
         $this->maxMixHandler = new MaxMax();
         $this->waldHandler = new Wald();
         $this->savageHandler = new Savage();
+        $this->hurwitzHandler = new Hurwitz();
     }
 
     public function handle(array $data): array
@@ -36,6 +41,7 @@ class Calculation
             'maxMax' => $this->maxMixHandler->handle($matrix),
             'wald' => $this->waldHandler->handle($matrix),
             'savage' => $this->savageHandler->handle($matrix),
+            'hurwitz' => $this->hurwitzHandler->handle($matrix, $hurwitz),
         ];
     }
 }
