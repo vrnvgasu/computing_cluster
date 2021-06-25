@@ -2,6 +2,9 @@
 require_once __DIR__ . '/../../../bin/app.php';
 
 use App\RabbitConnection;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use PhpAmqpLib\Message\AMQPMessage;
 
 $connection = (new RabbitConnection())->getConnection();
 $channel = $connection->channel();
@@ -12,11 +15,14 @@ $channel->queue_bind($_ENV['QUEUE_RESULT'], $_ENV['EXCHANGE_RESULT'], $_ENV['ROU
 
 echo " [*] Waiting for messages. To exit press CTRL+C\n";
 
-$callback = function ($msg) {
-    echo ' [x] ', $msg->body, "\n";
+$callback = function (AMQPMessage $msg) {
+    $result = json_decode($msg->body, true);
+    $log = new Logger('get_result');
+    $log->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/get_result.log', Logger::INFO));
+    $log->info($result['id']);
+    echo ' [x] ', $result['id'], "\n";
 };
 
-//подписались на нашу очередь $queue_name
 $channel->basic_consume(
     $_ENV['QUEUE_RESULT'],
     '',

@@ -3,6 +3,8 @@ require_once __DIR__ . '/../../../bin/app.php';
 
 use App\Factory;
 use App\RabbitConnection;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use PhpAmqpLib\Message\AMQPMessage;
 var_dump(2);
 
@@ -24,6 +26,9 @@ if (empty($taskCount)) {
 
 $data = [];
 
+$log = new Logger('send_task');
+$log->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/send_task.log', Logger::INFO));
+
 /** @var \App\Task $task */
 foreach ((new Factory())->generateTasks((int)$taskCount) as $task) {
     $data = [
@@ -41,7 +46,8 @@ foreach ((new Factory())->generateTasks((int)$taskCount) as $task) {
 
     $channel->basic_publish($msg, $_ENV['EXCHANGE_INIT'], $_ENV['ROUTING_KEY_INIT']);
 
-    echo ' [x] Sent ', $data, "\n";
+    $log->info($task->getId());
+    echo ' [x] Sent ', $task->getId(), "\n";
 }
 
 $channel->close();
