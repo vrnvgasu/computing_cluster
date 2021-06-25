@@ -20,6 +20,10 @@ class Calculation
      * @var Hurwitz
      */
     private $hurwitzHandler;
+    /**
+     * @var Bayes
+     */
+    private $bayesHandler;
 
     public function __construct()
     {
@@ -27,6 +31,7 @@ class Calculation
         $this->waldHandler = new Wald();
         $this->savageHandler = new Savage();
         $this->hurwitzHandler = new Hurwitz();
+        $this->bayesHandler = new Bayes();
     }
 
     public function handle(array $data): array
@@ -42,6 +47,7 @@ class Calculation
             'wald' => $this->waldHandler->handle($matrix),
             'savage' => $this->savageHandler->handle($matrix),
             'hurwitz' => $this->hurwitzHandler->handle($matrix, $hurwitz),
+            'bayes' => $this->bayesHandler->handle($matrix, $bayes),
         ];
     }
 }
