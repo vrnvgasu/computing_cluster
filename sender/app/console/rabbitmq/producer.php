@@ -6,7 +6,6 @@ use App\RabbitConnection;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use PhpAmqpLib\Message\AMQPMessage;
-var_dump(2);
 
 $connection = (new RabbitConnection())->getConnection();
 $channel = $connection->channel();

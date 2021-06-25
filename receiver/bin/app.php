@@ -7,4 +7,3 @@ $envPath = __DIR__ . '/../../.env';
 if (file_exists($envPath)) {
     (new Dotenv())->load($envPath);
 }
-print_r(1);
